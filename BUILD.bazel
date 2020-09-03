@@ -2,3 +2,20 @@
 package(
     default_visibility = ["//visibility:public"],
 )
+
+
+## Top-level (Public) Aliases
+alias(
+    name = "library",
+    actual = "//ocp:library",
+)
+
+alias(
+    name = "package",
+    actual = "//ocp:package",
+)
+
+alias(
+    name = "tool",
+    actual = "//ocp:tool",
+)

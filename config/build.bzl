@@ -27,6 +27,13 @@ DEPS = {
         "overlay": "ocpy.bzl",
         "targets": ["https://raw.githubusercontent.com/OpenCannabis/Protocol/master/releases/python-1.9.0-alpha1.tar.gz"],
         "seal": "b5f797ac02cd2d350f7638e96db61f351f557f5be0f95545a0495335ff736830"},
+
+    # Rules: PyPI Packaging
+    "pypi_packaging": {
+        "type": "github",
+        "repo": "sgammon/bazel-pypi-package",
+        "target": "91519eb2245ccdbbed91380df028b6762456099c",
+        "seal": "33acfad8d98d627bb3dacdb76e903ff1c998a0c4e4c42d2c35fa4b4ff7226aea"},
 }
 
 
