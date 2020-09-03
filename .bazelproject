@@ -1,0 +1,22 @@
+directories:
+  ocp
+  config
+  tools
+  external
+  pytests
+  -dist/
+
+build_flags:
+  --config=dev
+  --define=ocp_release_tag=latest
+
+workspace_type: python
+
+targets:
+  //ocp/...
+  //pytests/...
+  //config/...
+
+test_sources:
+  - */pytests/*
+

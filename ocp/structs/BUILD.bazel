@@ -1,0 +1,16 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_py",
+)
+
+
+## Protocol Definitions
+ocp_py(
+    name = "Species",
+    target = "@opencannabis//ocp/structs:Species",
+)

@@ -1,0 +1,5 @@
+
+LOCAL            = False
+GUST_VERSION     = "b986f9a77d5b3276ddceba7104f56c9fa13850f1"
+GUST_FINGERPRINT = "f4bd1c9b09b67613f2d2c6f63972ca85f7beeea6751ba4efc0ea3e524cf9f5d6"
+

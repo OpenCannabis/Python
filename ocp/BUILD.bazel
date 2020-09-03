@@ -1,0 +1,66 @@
+
+package(
+    default_visibility = ["//visibility:private"],
+)
+
+
+load(
+    "@rules_python//python:defs.bzl",
+    "py_library",
+    "py_binary",
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_py",
+    "ocp_lib",
+)
+
+
+## File Groups
+filegroup(
+    name = "root-py",
+    srcs = glob(["*.py"]),
+)
+
+
+## Python Libraries
+py_library(
+    name = "main-init",
+    srcs = ["__init__.py"],
+)
+
+py_library(
+    name = "species",
+    srcs = ["species.py"],
+    deps = [
+        ocp_lib("//ocp/structs:Species"),
+    ],
+)
+
+
+## Python CLI Tool
+py_binary(
+    name = "ocp-bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    imports = ["ocp"],
+    deps = [
+        ":main-init",
+        ":species",
+    ],
+)
+
+
+## Top-level (Public) Aliases
+alias(
+    name = "library",
+    actual = "ocp-bin",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "tool",
+    actual = "ocp-bin",
+    visibility = ["//visibility:public"],
+)
