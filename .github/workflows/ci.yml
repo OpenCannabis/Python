@@ -24,15 +24,6 @@ jobs:
           path: "/home/runner/.cache/bazel"
           key: bazel
 
-      - name: Install grcov
-        run: |
-          curl -sLO "https://github.com/mozilla/grcov/releases/download/v0.5.15/grcov-linux-x86_64.tar.bz2"
-          bunzip2 grcov-linux-x86_64.tar.bz2
-          tar -xvf grcov-linux-x86_64.tar
-          mkdir -p "${GITHUB_WORKSPACE}/bin/"
-          mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
-          chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
-
       - name: "Build & Test"
         run: |
           curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xz
@@ -45,13 +36,21 @@ jobs:
         if: always()
         run: |
           set -x
+          curl -sLO "https://github.com/mozilla/grcov/releases/download/v0.5.15/grcov-linux-x86_64.tar.bz2"
+          bunzip2 grcov-linux-x86_64.tar.bz2
+          tar -xvf grcov-linux-x86_64.tar
+          mkdir -p "${GITHUB_WORKSPACE}/bin/"
+          mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
+          chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
+          "${GITHUB_WORKSPACE}/bin/grcov" -V
           "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
             --ignore "*deps_*" --ignore "*_pb2.py" \
             --llvm > lcov.py.info
+          echo "LCov ready."
           file lcov.py.info
-          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
-          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
+          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
+          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
           bash -x <(curl -s https://codecov.io/bash) -Z -v -f ./lcov.py.info -F python_tests
         env:
           CC: clang-9
