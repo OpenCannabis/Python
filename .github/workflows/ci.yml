@@ -66,8 +66,7 @@ jobs:
             --llvm > lcov.py.info
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
           cd ..
-          echo "Would upload";
-          #bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
+          bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
         env:
           CC: clang-9
-          #CODECOV_TOKEN: ${{ secrets.CODE_COV }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
