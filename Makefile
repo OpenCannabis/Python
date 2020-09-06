@@ -24,9 +24,13 @@ endif
 
 LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 
+CP ?= $(shell which cp)
+LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
 AWK ?= $(shell which awk)
 GREP ?= $(shell which grep)
+CURL ?= $(shell which curl)
+CHMOD ?= $(shell which chmod)
 MKDIR ?= $(shell which mkdir)
 VIRTUALENV ?= $(shell which virtualenv)
 SYS_PYTHON ?= $(shell which python3)
@@ -37,6 +41,27 @@ IBAZEL ?= $(ENV)/bin/ibazel
 BAZELISK ?= $(ENV)/bin/bazelisk
 
 include tools/Check.makefile
+
+# OS tweaks
+ifeq ($(OS),Windows_NT)
+export PLATFORM ?= windows
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        export PLATFORM ?= linux
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        export PLATFORM ?= darwin
+    endif
+    UNAME_P := $(shell uname -p)
+    ifeq ($(UNAME_P),x86_64)
+        export ARCH ?= x86
+    endif
+    ifneq ($(filter arm%,$(UNAME_P)),)
+        export ARCH ?= ARM
+    endif
+endif
+
 
 
 all: build test  ## Build and test the SDK.
@@ -60,7 +85,7 @@ help:  ## Show this help text.
 	$(RULE)$(GREP) -E '^[a-z1-9A-Z_-]+:.*?## .*$$' $(PWD)/Makefile | sort | $(AWK) 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-$(LIBDIST): $(ENV)/python
+$(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
