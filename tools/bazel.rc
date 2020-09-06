@@ -29,9 +29,10 @@ build --workspace_status_command=./tools/bazel_stamp_vars.sh
 # Development
 ##
 
-build:dev --worker_sandboxing
+build --worker_sandboxing
+build --define=lib_release_tag=latest
+build --disk_cache=~/.cache/bazel-disk-cache
 build:adc --google_default_credentials=true
-build:dev --define=lib_release_tag=latest
 build:dev --compilation_mode=dbg
 build:dev --disk_cache=~/.cache/bazel-disk-cache
 
@@ -39,27 +40,32 @@ build:dev --disk_cache=~/.cache/bazel-disk-cache
 # CI
 ##
 
+common:ci --curses=no
+
 build:ci --worker_max_instances=32
 build:ci --local_cpu_resources=32
 build:ci --local_ram_resources="HOST_RAM*.8"
 build:ci --experimental_persistent_javac
+build:ci --verbose_failures
+build:ci --worker_verbose
+build:ci --repository_cache=~/.cache/bazel/repo
+build:ci --disk_cache=~/.cache/bazel/disk
+
 run:ci --worker_max_instances=32
 run:ci --local_cpu_resources=32
 run:ci --local_ram_resources="HOST_RAM*.8"
 run:ci --experimental_persistent_javac
-common:ci --curses=no
-build:ci --verbose_failures
-build:ci --worker_verbose
 run:ci --verbose_failures
 run:ci --worker_verbose
-test:ci --test_output=errors
-test:ci --test_verbose_timeout_warnings
-build:ci --repository_cache=~/.cache/bazel/repo
 run:ci --repository_cache=~/.cache/bazel/repo
+run:ci --disk_cache=~/.cache/bazel/disk
+
+test:ci --test_output=all
+test:ci --test_verbose_timeout_warnings
+
 fetch:ci --repository_cache=~/.cache/bazel/repo
 query:ci --repository_cache=~/.cache/bazel/repo
-build:ci --disk_cache=~/.cache/bazel/disk
-run:ci --disk_cache=~/.cache/bazel/disk
+
 
 ##
 # Release
@@ -82,9 +88,27 @@ query --output=label_kind
 # Testing
 ##
 
-build:dev --instrumentation_filter=//opencannabis/...
 test --instrumentation_filter=//opencannabis/...
 test --spawn_strategy=local
 coverage --instrumentation_filter=//opencannabis/...
+coverage --spawn_strategy=local
+build:ci --instrument_test_targets
+build:ci --experimental_cc_coverage
+build:ci --test_output=all
+build:ci --linkopt=--coverage
+build:ci --linkopt=-lc
+build:ci --combined_report=lcov
+build:ci --no_cache_test_results
+build:ci --define=config_file=test
+test:ci --no_cache_test_results
+test:ci --define=config_file=test
+coverage:ci --instrument_test_targets
+coverage:ci --experimental_cc_coverage
+coverage:ci --test_output=all
+coverage:ci --linkopt=--coverage
+coverage:ci --linkopt=-lc
+coverage:ci --combined_report=lcov
+coverage:ci --no_cache_test_results
+coverage:ci --define=config_file=test
 
 try-import %workspace%/.bazelrc.user

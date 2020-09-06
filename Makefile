@@ -15,11 +15,17 @@ TESTS ?= //pytests:tests
 IBAZEL_VERSION ?= v0.13.1
 BAZELISK_VERSION ?= v1.6.0
 COVERAGE ?= yes
+CI ?= no
+TAG ?=
 
 ifeq ($(COVERAGE),yes)
 TEST_COMMAND ?= coverage
 else
 TEST_COMMAND ?= test
+endif
+
+ifeq ($(CI),yes)
+TAG += --config=ci
 endif
 
 ifeq ($(VERBOSE),no)
@@ -82,7 +88,7 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 
 test: $(LIBDIST)  ## Run unit tests for the SDK.
 	@echo "Running testsuite..."
-	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TESTS)
+	$(RULE)$(BAZELISK) $(TAG) $(TEST_COMMAND) $(TESTS)
 
 release: $(LIBDIST)  ## Release artifacts for the built library.
 
@@ -97,7 +103,7 @@ help:  ## Show this help text.
 
 $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
-	$(RULE)$(BAZELISK) build $(TARGET)
+	$(RULE)$(BAZELISK) $(TAG) build $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
 	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
 

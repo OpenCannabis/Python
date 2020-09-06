@@ -40,11 +40,12 @@ jobs:
       - name: Test
         run: |
           cd "${GITHUB_WORKSPACE}/"
-          curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xvz
-          "${GITHUB_WORKSPACE}/.env/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
-              --test_output=all --linkopt=--coverage --linkopt=-lc --combined_report=lcov \
-              --test_env="PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py" \
-              --define=config_file=test //pytests:tests
+          curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xz
+          #"${GITHUB_WORKSPACE}/.env/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
+          #    --test_output=all --linkopt=--coverage --linkopt=-lc --combined_report=lcov \
+          #    --test_env="PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py" \
+          #    --define=config_file=test //pytests:tests
+          make test CI=yes COVERAGE=yes VERBOSE=yes
           cp "${GITHUB_WORKSPACE}/dist/Python/bazel-out/_coverage/_coverage_report.dat" coverage.py.info
         env:
           CC: clang-9
