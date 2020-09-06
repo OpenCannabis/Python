@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
   name='opencannabis',
-  version='0.0.1-alpha4',
+  version='0.0.1-alpha5',
   description='OpenCannabis SDK for Python',
   author='Sam Gammon',
   author_email='sam.g@cookies.co',

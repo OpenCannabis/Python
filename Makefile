@@ -4,7 +4,7 @@
 #
 
 PROJECT ?= ocpy
-VERSION ?= 0.0.1-alpha4
+VERSION ?= 0.0.1-alpha5
 PWD ?= $(shell pwd)
 ENV ?= $(PWD)/.env
 DIST ?= $(PWD)/dist
