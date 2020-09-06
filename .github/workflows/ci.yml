@@ -28,7 +28,7 @@ jobs:
         run: |
           curl -sLO "https://github.com/mozilla/grcov/releases/download/v0.5.15/grcov-linux-x86_64.tar.bz2"
           bunzip2 grcov-linux-x86_64.tar.bz2
-          tar -xzvf grcov-linux-x86_64.tar
+          tar -xvf grcov-linux-x86_64.tar
           mkdir -p "${GITHUB_WORKSPACE}/bin/"
           mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
           chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
