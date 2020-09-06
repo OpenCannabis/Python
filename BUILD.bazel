@@ -60,5 +60,5 @@ alias(
 
 alias(
     name = "archive",
-    actual = "//opencannabis:lib-archive",
+    actual = "//opencannabis:archive",
 )

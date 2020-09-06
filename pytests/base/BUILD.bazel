@@ -8,3 +8,18 @@ load(
     "@rules_python//python:defs.bzl",
     "py_test",
 )
+
+load(
+    "//config:rules.bzl",
+    "ocp_lib",
+)
+
+py_test(
+    name = "base_test",
+    srcs = ["base_test.py"],
+    size = "small",
+    testonly = True,
+    deps = [
+        "//opencannabis:library",
+    ],
+)

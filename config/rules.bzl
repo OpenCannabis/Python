@@ -77,9 +77,15 @@ def _ocp_module(name,
     # declare packages
     [ocp_py(name = n, target = "%s:%s" % (package_name, n)) for n in protos]
 
+    _py_library(
+        name = name,
+        srcs = [init],
+        deps = [_ocp_lib(":%s" % p) for p in protos],
+    )
+
     # declare module tarball
     _pkg_tar(
-        name = name,
+        name = "%s-archive" % name,
         package_dir = path or "opencannabis/%s" % (package or name),
         srcs = [_ocp_lib(":%s" % p) for p in protos] + [init],
     )

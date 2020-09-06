@@ -22,6 +22,40 @@ load(
 )
 
 
+DEPS_LIST = [
+    "//gust:gust-init",
+    "//gust/core:core",
+    ":ocp-init",
+] + ["//opencannabis/%s:%s" % (path, path) for path in [
+    "accounting",
+    "base",
+    "commerce",
+    "contact",
+    "content",
+    "crypto",
+    "device",
+    "geo",
+    "inventory",
+    "media",
+    "oauth",
+    "person",
+    "products",
+    "proximity",
+    "structs",
+    "temporal",
+]] + ["//opencannabis/%s:%s" % (path, name) for (path, name) in [
+    ("commerce/payments", "payments"),
+    ("crypto/primitives", "primitives"),
+    ("geo/usa/ca", "ca"),
+    ("inventory/rfid", "rfid"),
+    ("products/distribution", "distribution"),
+    ("products/menu", "menu"),
+    ("regulatory/usa/ca", "ca"),
+    ("structs/labtesting", "labtesting"),
+    ("structs/pricing", "pricing"),
+]]
+
+
 ## File Groups
 filegroup(
     name = "root-py",
@@ -31,17 +65,22 @@ filegroup(
 
 ## Python Libraries
 py_library(
-    name = "main-init",
+    name = "ocp-init",
     srcs = ["__init__.py"],
 )
 
+py_library(
+    name = "ocp-lib",
+    deps = DEPS_LIST,
+    imports = ["gust", "opencannabis"],
+)
 
 ## Python CLI Tool
 py_binary(
     name = "ocp-bin",
     imports = ["ocp"],
     main = "__main__.py",
-    deps = [":main-init"],
+    deps = [":ocp-init"],
     srcs = ["__main__.py"],
 )
 
@@ -49,51 +88,20 @@ py_binary(
 ## Compressed Packages
 pkg_tar(
     name = "ocp-init-archive",
-    srcs = [":main-init"],
+    srcs = [":ocp-init"],
     package_dir = "opencannabis/",
 )
 
 pkg_tar(
     name = "ocp-lib-archive",
-    deps = [
-        "//gust:gust-init",
-        "//gust/core:core",
-        ":ocp-init-archive",
-    ] + ["//opencannabis/%s:%s" % (path, path) for path in [
-        "accounting",
-        "base",
-        "commerce",
-        "contact",
-        "content",
-        "crypto",
-        "device",
-        "geo",
-        "inventory",
-        "media",
-        "oauth",
-        "person",
-        "products",
-        "proximity",
-        "structs",
-        "temporal",
-    ]] + ["//opencannabis/%s:%s" % (path, name) for (path, name) in [
-        ("commerce/payments", "payments"),
-        ("crypto/primitives", "primitives"),
-        ("geo/usa/ca", "ca"),
-        ("inventory/rfid", "rfid"),
-        ("products/distribution", "distribution"),
-        ("products/menu", "menu"),
-        ("regulatory/usa/ca", "ca"),
-        ("structs/labtesting", "labtesting"),
-        ("structs/pricing", "pricing"),
-    ]],
+    deps = [("%s-archive" % i) for i in DEPS_LIST],
 )
 
 
 ## Top-level (Public) Aliases
 alias(
     name = "library",
-    actual = "ocp-bin",
+    actual = "ocp-lib",
     visibility = ["//visibility:public"],
 )
 
@@ -104,7 +112,7 @@ alias(
 )
 
 alias(
-    name = "lib-archive",
+    name = "archive",
     actual = "ocp-lib-archive",
     visibility = ["//visibility:public"],
 )

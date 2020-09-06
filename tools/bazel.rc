@@ -90,6 +90,7 @@ query --output=label_kind
 
 test --instrumentation_filter=//opencannabis/...
 test --spawn_strategy=local
+test --test_output=errors
 coverage --instrumentation_filter=//opencannabis/...
 coverage --spawn_strategy=local
 build:ci --instrument_test_targets
