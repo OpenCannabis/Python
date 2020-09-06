@@ -32,6 +32,20 @@ jobs:
         env:
           CC: clang-9
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: archive
+          path: "${GITHUB_WORKSPACE}/dist/bin/opencannabis/ocp-lib-archive.tar"
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: |
+            lcov.py.info
+            coverage.py.info
+
       - name: codecov
         if: always()
         run: |
@@ -47,21 +61,6 @@ jobs:
         env:
           CC: clang-9
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: archive
-          path: "${GITHUB_WORKSPACE}/dist/bin/opencannabis/ocp-lib-archive.tar"
-
-      - name: Upload Reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: reports
-          path: |
-            lcov.py.info
-            coverage.py.info
-            !path/**/*.tmp
 
 
 #"${GITHUB_WORKSPACE}/.env/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
