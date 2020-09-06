@@ -15,8 +15,8 @@ jobs:
 
       - name: Install Python/Pip
         run: |
-          apt-get install python python-pip
-          pip install virtualenv
+          sudo apt-get install python python-pip
+          sudo pip install virtualenv
 
       - name: Mount Cache
         uses: actions/cache@v1
