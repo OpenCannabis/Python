@@ -17,6 +17,7 @@ BAZELISK_VERSION ?= v1.6.0
 COVERAGE ?= no
 RELEASE ?= no
 CI ?= no
+COLORS ?= no
 TAG ?=
 DISTRIBUTIONS ?= sdist bdist_egg
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
@@ -106,6 +107,9 @@ else
     endif
 endif
 
+ifeq ($(COLORS),yes)
+else
+endif
 
 
 all: build test  ## Build and test the SDK.
