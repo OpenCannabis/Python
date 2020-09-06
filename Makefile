@@ -127,7 +127,7 @@ coverage:  ## Generate a unified coverage report. Typically run in CI and requir
 report-coverage:  ## Report coverage results to Codecov.
 	@echo "Reporting coverage..."
 	$(RULE)curl -s https://codecov.io/bash > codecov.sh
-	$(RULE)bash -x codecov.sh -Z -v -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
+	$(RULE)bash -x codecov.sh -Z $(POSIX_FLAGS) -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
 
 release: $(LIBDIST) render-tpl  ## Release artifacts for the built library, and re-render codebase docs.
 
