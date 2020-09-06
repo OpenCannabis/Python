@@ -56,7 +56,6 @@ endif
 
 LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 
-CD ?= $(shell which cd)
 CP ?= $(shell which cp)
 LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
@@ -104,7 +103,7 @@ build: $(LIBDIST) $(BAZELISK)  ## Build the Python SDK for OpenCannabis.
 
 prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 	@echo "Starting interactive terminal session..."
-	$(RULE)$(CD) $(LIBDIST) && $(PYTHON)
+	$(RULE)cd $(LIBDIST) && $(PYTHON)
 
 ifeq ($(COVERAGE),yes)
 test: $(ENV)/python $(BAZELISK) $(ENV)/coverage  ## Run unit tests for the SDK.
@@ -128,11 +127,14 @@ report-coverage:  ## Report coverage results to Codecov.
 	$(RULE)curl -s https://codecov.io/bash > codecov.sh
 	$(RULE)bash -x codecov.sh -Z -v -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
 
-release: $(LIBDIST)  ## Release artifacts for the built library.
+release: $(LIBDIST) render-tpl  ## Release artifacts for the built library, and re-render codebase docs.
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
 	@echo "Cleaning codebase..."
 	$(RULE)$(RM) -fr $(POSIX_FLAGS) $(LIBDIST)
+
+render-tpl:  ## Render templates for help materials, such as the main README.
+	@echo "Re-rendering codebase templates..."
 
 help:  ## Show this help text.
 	@echo "$(PROJECT) / $(VERSION):\n"
@@ -143,7 +145,7 @@ $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TAG) $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
-	$(RULE)$(CD) $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
+	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
 
 environment env: $(ENV)/python $(BAZELISK)  ## Prepare the local Python environment.
 	@echo "Environment ready."
@@ -165,7 +167,7 @@ $(ENV)/python: $(ENV)
 $(ENV)/coverage: $(ENV)
 	@echo "Installing coverage tools..."
 	$(RULE)$(MKDIR) -p $(ENV)/coverage && \
-		$(CD) $(ENV)/coverage && \
+		cd $(ENV)/coverage && \
 		$(CURL) -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xz;
 	@echo "Coverage tools ready."
 
