@@ -18,8 +18,9 @@ COVERAGE ?= no
 RELEASE ?= no
 CI ?= no
 TAG ?=
-DISTRIBUTIONS ?= sdist bdist bdist_egg
+DISTRIBUTIONS ?= sdist bdist_egg
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
+TWINE_ACTION ?= upload
 
 COVERAGE_ARGS ?= -t- \
 	--instrument_test_targets \
@@ -71,6 +72,7 @@ GREP ?= $(shell which grep)
 CURL ?= $(shell which curl)
 CHMOD ?= $(shell which chmod)
 MKDIR ?= $(shell which mkdir)
+TWINE ?= $(shell which twine)
 VIRTUALENV ?= $(shell which virtualenv)
 SYS_PYTHON ?= $(shell which python3)
 GRCOV ?= $(shell which grcov)
@@ -135,9 +137,21 @@ report-coverage:  ## Report coverage results to Codecov.
 	$(RULE)curl -s https://codecov.io/bash > codecov.sh
 	$(RULE)bash -x codecov.sh -Z $(POSIX_FLAGS) -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
 
-release: $(LIBDIST) render-tpl  ## Release artifacts for the built library, and re-render codebase docs.
+release: $(LIBDIST) render-tpl  ## Build release artifacts for the library, and re-render codebase docs.
 	@echo "Assembling package 'gust'..."
 	$(RULE)cd $(LIBDIST) && $(PYTHON) setup-gust.py $(DISTRIBUTIONS)
+	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
+
+publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite permissions).
+	@#echo "Publishing package 'gust'..."
+	$(RULE)#cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) \
+		#dist/gust-*.tar.gz;
+		#dist/gust-*.egg \
+		#dist/gust-*.wheel;
+	@echo "Publishing package 'opencannabis'..."
+	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) \
+		dist/opencannabis-*.tar.gz
+		dist/opencannabis-*.egg;
 	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
