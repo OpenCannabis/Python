@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Install Python/Pip
+        run: |
+          apt-get install python python-pip
+          pip install virtualenv
+
       - name: Mount Cache
         uses: actions/cache@v1
         with:
