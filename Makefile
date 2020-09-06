@@ -21,6 +21,7 @@ TAG ?=
 DISTRIBUTIONS ?= sdist bdist_egg
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
 TWINE_ACTION ?= upload
+TWINE_ARGS ?=
 
 COVERAGE_ARGS ?= -t- \
 	--instrument_test_targets \
@@ -149,10 +150,10 @@ publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite
 		#dist/gust-*.egg \
 		#dist/gust-*.wheel;
 	@echo "Publishing package 'opencannabis'..."
-	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) \
-		dist/opencannabis-*.tar.gz
+	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) $(TWINE_ARGS) \
+		dist/opencannabis-*.tar.gz \
 		dist/opencannabis-*.egg;
-	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
+	@echo "Package published: 'opencannabis==$(VERSION)'. See it at https://pypi.org/project/opencannabis/"
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
 	@echo "Cleaning codebase..."
