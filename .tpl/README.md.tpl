@@ -16,6 +16,3 @@ pip install opencannabis
 
 Invoking `make help` reveals local commands intended for development:
 ```text
-{{HELP}}
-```
-

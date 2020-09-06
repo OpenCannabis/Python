@@ -4,7 +4,7 @@
 #
 
 PROJECT ?= ocpy
-VERSION ?= 0.0.1-alpha6
+VERSION ?= 0.0.1-alpha7
 PWD ?= $(shell pwd)
 ENV ?= $(PWD)/.env
 DIST ?= $(PWD)/dist
@@ -67,6 +67,7 @@ LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 CP ?= $(shell which cp)
 LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
+CAT ?= $(shell which cat)
 SED ?= $(shell which sed)
 AWK ?= $(shell which awk)
 GREP ?= $(shell which grep)
@@ -161,6 +162,11 @@ clean:  ## Remove built artifacts (safe to run with codebase changes).
 
 render-tpl:  ## Render templates for help materials, such as the main README.
 	@echo "Re-rendering codebase templates..."
+	@$(SED) "s/{{VERSION}}/$(VERSION)/g" .tpl/ocp-setup.py.tpl > opencannabis/setup.py;
+	@$(SED) "s/{{VERSION}}/$(VERSION)/g" .tpl/README.md.tpl > README.md;
+	@$(MAKE) help >> README.md;
+	@$(CAT) .tpl/README_FOOTER.md.tpl >> README.md;
+	@echo "Doc templates rendered."
 
 help:  ## Show this help text.
 	@echo "$(PROJECT) / $(VERSION):\n"
