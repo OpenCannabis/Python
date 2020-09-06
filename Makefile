@@ -86,7 +86,7 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 	@echo "Starting interactive terminal session..."
 	$(RULE)cd $(LIBDIST) && $(PYTHON)
 
-test: $(LIBDIST)  ## Run unit tests for the SDK.
+test: $(ENV)/python $(BAZELISK)  ## Run unit tests for the SDK.
 	@echo "Running testsuite..."
 	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TESTS)
 
