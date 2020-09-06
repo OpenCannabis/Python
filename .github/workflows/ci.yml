@@ -33,13 +33,6 @@ jobs:
           mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
           chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
 
-      - name: Install Bazelisk
-        run: |
-          curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.1.0/bazelisk-linux-amd64"
-          mkdir -p "${GITHUB_WORKSPACE}/bin/"
-          mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazelisk"
-          chmod +x "${GITHUB_WORKSPACE}/bin/bazelisk"
-
       - name: Build & Test
         run: |
           make build test CI=yes VERBOSE=yes
@@ -48,7 +41,7 @@ jobs:
         run: |
           cd "${GITHUB_WORKSPACE}/"
           curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xvz
-          "${GITHUB_WORKSPACE}/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
+          "${GITHUB_WORKSPACE}/.env/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
               --test_output=errors --linkopt=--coverage --linkopt=-lc \
               --test_env=PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py \
               --define=config_file=test //pytests:tests
