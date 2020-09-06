@@ -24,6 +24,15 @@ jobs:
           path: "/home/runner/.cache/bazel"
           key: bazel
 
+      - name: Install grcov
+        run: |
+          curl -sLO "https://github.com/mozilla/grcov/releases/download/v0.5.15/grcov-linux-x86_64.tar.bz2"
+          bunzip2 grcov-linux-x86_64.tar.bz2
+          tar -xzvf grcov-linux-x86_64.tar
+          mkdir -p "${GITHUB_WORKSPACE}/bin/"
+          mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
+          chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
+
       - name: Install Bazelisk
         run: |
           curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.1.0/bazelisk-linux-amd64"
@@ -43,25 +52,22 @@ jobs:
               --test_output=errors --linkopt=--coverage --linkopt=-lc \
               --test_env=PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py \
               --define=config_file=test //pytests:tests
-          # Unfortunately, coverage does not produce the hit information. Running
-          # the compiled tests explicitly seems to work though.
-          find dist/bin/pytests/ -maxdepth 1 -regex ".*-test$" -exec {} \;
-          cp bazel-out/k8-fastbuild/testlogs/pd3/pytests/smoke-test/coverage.dat coverage.py.info
         env:
           CC: clang-9
 
-      - name: Upload to Codecov
+      - name: codecov
         if: always()
         run: |
           set -x
-          cd "${GITHUB_WORKSPACE}/"
-          "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info dist/bin/pytests/_objs/ -t lcov \
+          cd "${GITHUB_WORKSPACE}/src"
+          ~/bin/grcov coverage.py.info dist/Python/_coverage/ -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
             --ignore "*deps_*" --ignore "*_pb2.py"  \
             --llvm > lcov.py.info
-          sed -i 's/SF:.*test\.runfiles\/pytests\/python/SF:pytests/g' coverage.py.info
+          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
           cd ..
-          bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
+          echo "Would upload";
+          #bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
         env:
           CC: clang-9
-          CODECOV_TOKEN: ${{ secrets.CODE_COV }}
+          #CODECOV_TOKEN: ${{ secrets.CODE_COV }}
