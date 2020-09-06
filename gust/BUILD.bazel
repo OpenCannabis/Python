@@ -8,13 +8,30 @@ load(
 )
 
 load(
+    "@rules_python//python:defs.bzl",
+    "py_library",
+)
+
+load(
     "@rules_pkg//:pkg.bzl",
     "pkg_tar",
 )
 
 
+exports_files(["__init__.py"])
+
+
+py_library(
+    name = "library",
+    srcs = [":__init__.py"],
+    deps = [
+        "//gust/core:library",
+    ],
+)
+
+
 pkg_tar(
     name = "gust-init",
-    srcs = ["__init__.py"],
+    srcs = [":__init__.py"],
     package_dir = "gust/",
 )

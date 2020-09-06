@@ -9,9 +9,18 @@ load(
     "py_test",
 )
 
+py_test(
+    name = "module_test",
+    srcs = ["module_test.py"],
+    testonly = True,
+    deps = [
+        "//gust:library",
+        "//opencannabis:library",
+    ],
+)
 
 py_test(
-    name = "sanity",
-    srcs = ["sanity.py"],
+    name = "sanity_test",
+    srcs = ["sanity_test.py"],
     testonly = True,
 )

@@ -42,9 +42,10 @@ jobs:
           cd "${GITHUB_WORKSPACE}/"
           curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xvz
           "${GITHUB_WORKSPACE}/.env/bin/bazelisk" coverage -t- --instrument_test_targets --experimental_cc_coverage \
-              --test_output=errors --linkopt=--coverage --linkopt=-lc \
-              --test_env=PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py \
+              --test_output=all --linkopt=--coverage --linkopt=-lc --combined_report=lcov \
+              --test_env="PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py" \
               --define=config_file=test //pytests:tests
+          cp "${GITHUB_WORKSPACE}/dist/Python/bazel-out/_coverage/_coverage_report.dat" coverage.py.info
         env:
           CC: clang-9
 
@@ -55,9 +56,10 @@ jobs:
           cd "${GITHUB_WORKSPACE}/"
           "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info dist/Python/_coverage/ -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
-            --ignore "*deps_*" --ignore "*_pb2.py"  \
+            --ignore "*deps_*" --ignore "*_pb2.py" \
             --llvm > lcov.py.info
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
+          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
           cd ..
           bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
         env:

@@ -5,7 +5,7 @@
 import unittest
 
 
-class TestOne(unittest.TestCase):
+class SanityTest(unittest.TestCase):
     """Sanity tests."""
 
     def test_math(self):

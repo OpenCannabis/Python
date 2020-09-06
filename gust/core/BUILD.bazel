@@ -6,6 +6,24 @@ package(
 load(
     "//config:rules.bzl",
     "ocp_module",
+    "ocp_lib",
+)
+
+load(
+    "@rules_python//python:defs.bzl",
+    "py_library",
+)
+
+
+exports_files(["__init__.py"])
+
+
+py_library(
+    name = "library",
+    srcs = [":__init__.py"],
+    deps = [
+        ocp_lib(":Datamodel"),
+    ],
 )
 
 

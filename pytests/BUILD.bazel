@@ -3,6 +3,7 @@
 test_suite(
     name = "tests",
     tests = [
-        "//pytests/simple:sanity",
+        "//pytests/simple:sanity_test",
+        "//pytests/simple:module_test",
     ],
 )
