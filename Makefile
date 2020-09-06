@@ -88,7 +88,7 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 
 test: $(LIBDIST)  ## Run unit tests for the SDK.
 	@echo "Running testsuite..."
-	$(RULE)$(BAZELISK) $(TAG) $(TEST_COMMAND) $(TESTS)
+	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TESTS)
 
 release: $(LIBDIST)  ## Release artifacts for the built library.
 
@@ -103,7 +103,7 @@ help:  ## Show this help text.
 
 $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
-	$(RULE)$(BAZELISK) $(TAG) build $(TARGET)
+	$(RULE)$(BAZELISK) build $(TAG) $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
 	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
 
