@@ -18,7 +18,12 @@ COVERAGE ?= yes
 CI ?= no
 TAG ?=
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
+
+ifeq ($(CI),yes)
+COVERAGE_REPORT ?= $(PWD)/bazel-out/_coverage/_coverage_report.dat
+else
 COVERAGE_REPORT ?= $(DIST)/out/_coverage/_coverage_report.dat
+endif
 
 ifeq ($(COVERAGE),yes)
 TEST_COMMAND ?= coverage
