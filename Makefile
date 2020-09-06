@@ -17,6 +17,7 @@ BAZELISK_VERSION ?= v1.6.0
 COVERAGE ?= yes
 CI ?= no
 TAG ?=
+CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
 
 ifeq ($(COVERAGE),yes)
 TEST_COMMAND ?= coverage
@@ -48,6 +49,7 @@ CHMOD ?= $(shell which chmod)
 MKDIR ?= $(shell which mkdir)
 VIRTUALENV ?= $(shell which virtualenv)
 SYS_PYTHON ?= $(shell which python3)
+GRCOV ?= $(shell which grcov)
 
 PIP ?= $(ENV)/python/bin/pip
 PYTHON ?= $(ENV)/python/bin/python
@@ -89,6 +91,20 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 test: $(ENV)/python $(BAZELISK)  ## Run unit tests for the SDK.
 	@echo "Running testsuite..."
 	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TESTS)
+
+coverage:  ## Generate a unified coverage report. Typically run in CI and requires grcov.
+	@echo "Generating coverage report..."
+	$(RULE)$(CP) -f $(POSIX_FLAGS) "$(DIST)/Python/bazel-out/_coverage/_coverage_report.dat" coverage.py.info
+	$(RULE)$(GRCOV) coverage.py.info -t lcov \
+		--ignore "external/*" --ignore "/usr/*" \
+		--ignore "*deps_*" --ignore "*_pb2.py" \
+		--llvm > lcov.py.info
+	$(RULE)file lcov.py.info
+
+report-coverage:  ## Report coverage results to Codecov.
+	@echo "Reporting coverage..."
+	$(RULE)curl -s https://codecov.io/bash > codecov.sh
+	$(RULE)bash -x codecov.sh -Z -v -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
 
 release: $(LIBDIST)  ## Release artifacts for the built library.
 

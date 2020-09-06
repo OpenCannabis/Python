@@ -12,6 +12,7 @@ load(
 py_test(
     name = "module_test",
     srcs = ["module_test.py"],
+    size = "small",
     testonly = True,
     deps = [
         "//gust:library",
@@ -22,5 +23,6 @@ py_test(
 py_test(
     name = "sanity_test",
     srcs = ["sanity_test.py"],
+    size = "small",
     testonly = True,
 )

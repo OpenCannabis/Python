@@ -43,15 +43,7 @@ jobs:
           mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
           chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
           "${GITHUB_WORKSPACE}/bin/grcov" -V
-          "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info -t lcov \
-            --ignore "external/*" --ignore "/usr/*" \
-            --ignore "*deps_*" --ignore "*_pb2.py" \
-            --llvm > lcov.py.info
-          echo "LCov ready."
-          file lcov.py.info
-          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
-          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
-          bash -x <(curl -s https://codecov.io/bash) -Z -v -f ./lcov.py.info -F python_tests
+          make coverage report-coverage CI=yes VERBOSE=yes GRCOV="${GITHUB_WORKSPACE}/bin/grcov"
         env:
           CC: clang-9
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
