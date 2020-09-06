@@ -61,7 +61,22 @@ jobs:
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
           cd ..
-          bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
+          bash -x <(curl -s https://codecov.io/bash) -Z -v -f lcov.py.info -F python_tests
         env:
           CC: clang-9
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: archive
+          path: "${GITHUB_WORKSPACE}/dist/bin/opencannabis/ocp-lib-archive.tar"
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: |
+            lcov.py.info
+            coverage.py.info
+            !path/**/*.tmp
