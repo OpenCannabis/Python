@@ -35,6 +35,11 @@ alias(
 )
 
 pkg_tar(
+    name = "setup-archive",
+    srcs = [":setup-gust.py"],
+)
+
+pkg_tar(
     name = "gust-init-archive",
     srcs = [":__init__.py"],
     package_dir = "gust/",

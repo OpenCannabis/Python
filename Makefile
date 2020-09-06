@@ -17,6 +17,7 @@ BAZELISK_VERSION ?= v1.6.0
 COVERAGE ?= yes
 CI ?= no
 TAG ?=
+DISTRIBUTIONS ?= sdist bdist bdist_egg
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
 
 COVERAGE_ARGS ?= -t- \
@@ -130,6 +131,9 @@ report-coverage:  ## Report coverage results to Codecov.
 	$(RULE)bash -x codecov.sh -Z $(POSIX_FLAGS) -f ./lcov.py.info -F python_tests -t $(CODECOV_TOKEN)
 
 release: $(LIBDIST) render-tpl  ## Release artifacts for the built library, and re-render codebase docs.
+	@echo "Assembling package 'gust'..."
+	$(RULE)cd $(LIBDIST) && $(PYTHON) setup-gust.py $(DISTRIBUTIONS)
+	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
 	@echo "Cleaning codebase..."

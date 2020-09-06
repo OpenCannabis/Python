@@ -75,6 +75,18 @@ py_library(
     imports = ["gust", "opencannabis"],
 )
 
+alias(
+    name = "requirements",
+    actual = "//:requirements.txt",
+)
+
+py_library(
+    name = "ocp-setup",
+    srcs = ["setup.py"],
+    deps = [":ocp-lib"],
+    data = [":requirements"],
+)
+
 ## Python CLI Tool
 py_binary(
     name = "ocp-bin",
@@ -93,8 +105,17 @@ pkg_tar(
 )
 
 pkg_tar(
+    name = "ocp-setup-archive",
+    srcs = [":ocp-setup"],
+)
+
+pkg_tar(
     name = "ocp-lib-archive",
-    deps = [("%s-archive" % i) for i in DEPS_LIST],
+    srcs = [":requirements"],
+    deps = [("%s-archive" % i) for i in DEPS_LIST] + [
+        ":ocp-setup-archive",
+        "//gust:setup-archive",
+    ],
 )
 
 
