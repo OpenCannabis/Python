@@ -98,9 +98,9 @@ build:ci --test_output=all
 build:ci --linkopt=--coverage
 build:ci --linkopt=-lc
 build:ci --combined_report=lcov
-build:ci --no_cache_test_results
+build:ci --cache_test_results=no
 build:ci --define=config_file=test
-test:ci --no_cache_test_results
+test:ci --cache_test_results=no
 test:ci --define=config_file=test
 coverage:ci --instrument_test_targets
 coverage:ci --experimental_cc_coverage
@@ -108,7 +108,7 @@ coverage:ci --test_output=all
 coverage:ci --linkopt=--coverage
 coverage:ci --linkopt=-lc
 coverage:ci --combined_report=lcov
-coverage:ci --no_cache_test_results
+coverage:ci --cache_test_results=no
 coverage:ci --define=config_file=test
 
 try-import %workspace%/.bazelrc.user
