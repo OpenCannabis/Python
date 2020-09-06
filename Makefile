@@ -14,7 +14,8 @@ TARGET ?= //:archive
 TESTS ?= //pytests:tests
 IBAZEL_VERSION ?= v0.13.1
 BAZELISK_VERSION ?= v1.6.0
-COVERAGE ?= yes
+COVERAGE ?= no
+RELEASE ?= no
 CI ?= no
 TAG ?=
 DISTRIBUTIONS ?= sdist bdist bdist_egg
@@ -45,6 +46,10 @@ endif
 
 ifeq ($(CI),yes)
 TAG += --config=ci
+endif
+
+ifeq ($(RELEASE),yes)
+TAG += --config=release
 endif
 
 ifeq ($(VERBOSE),no)
