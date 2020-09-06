@@ -89,7 +89,7 @@ $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
-	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xzf $(LIB_ARCHIVE)
+	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
 
 environment env: $(ENV)/python $(BAZELISK)  ## Prepare the local Python environment.
 	@echo "Environment ready."
