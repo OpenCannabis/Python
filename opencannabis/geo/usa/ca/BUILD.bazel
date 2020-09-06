@@ -10,7 +10,7 @@ load(
 
 
 ocp_module(
-    name = "geo",
+    name = "ca",
     init = ":__init__.py",
     package = "geo/usa/ca",
     protos = [

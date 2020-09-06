@@ -9,4 +9,3 @@ __doc__ = """
 """
 
 # `opencannabis.commerce.payments`
-from Payment_pb2 import Payment

@@ -68,7 +68,6 @@ def _ocp_module(name,
                 protos,
                 init,
                 package = None,
-                submodules = [],
                 deps = [],
                 path = None):
     """ Generate OpenCannabis Python declarations for a given proto module. """
@@ -83,7 +82,6 @@ def _ocp_module(name,
         name = name,
         package_dir = path or "opencannabis/%s" % (package or name),
         srcs = [_ocp_lib(":%s" % p) for p in protos] + [init],
-        deps = ["%s/%s/%s:%s" % ("//ocp", (package or name), p, p) for p in submodules] + deps,
     )
 
 

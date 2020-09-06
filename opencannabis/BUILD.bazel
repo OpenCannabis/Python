@@ -61,7 +61,7 @@ pkg_tar(
         "//gust/core:core",
         ":ocp-init-archive",
     ] + ["//opencannabis/%s:%s" % (path, path) for path in [
-#        "accounting",  @TODO(sgammon)
+        "accounting",
         "base",
         "commerce",
         "contact",
@@ -69,11 +69,24 @@ pkg_tar(
         "crypto",
         "device",
         "geo",
-#        "inventory",  @TODO(sgammon)
+        "inventory",
         "media",
-
+        "oauth",
+        "person",
+        "products",
+        "proximity",
         "structs",
         "temporal",
+    ]] + ["//opencannabis/%s:%s" % (path, name) for (path, name) in [
+        ("commerce/payments", "payments"),
+        ("crypto/primitives", "primitives"),
+        ("geo/usa/ca", "ca"),
+        ("inventory/rfid", "rfid"),
+        ("products/distribution", "distribution"),
+        ("products/menu", "menu"),
+        ("regulatory/usa/ca", "ca"),
+        ("structs/labtesting", "labtesting"),
+        ("structs/pricing", "pricing"),
     ]],
 )
 

@@ -9,7 +9,3 @@ __doc__ = """
 """
 
 # `opencannabis.base`
-from .Compression_pb2 import Compression
-from .Language_pb2 import Language
-from .ProductKey_pb2 import ProductKey
-from .ProductKind_pb2 import ProductKind

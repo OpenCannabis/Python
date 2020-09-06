@@ -17,8 +17,8 @@ DEPS = {
     "ocp": {
         "type": "github",
         "repo": "OpenCannabis/Protocol",
-        "target": "0ac19fa280bca2f4d255b70be9db9ba7041f17e6",
-        "seal": "dfa5a789b60e2a822256e9f7309117401710c9e54a09ef377517d9d67a8db80a"},
+        "target": "d9405b04737a3c085d0e061b0aefeda70d8907c0",
+        "seal": "822cff667e84fb14110360694750686e0853d9ce7b8df7f976fc804a6ecf7b98"},
 
     # OpenCannabis: Python Sources
     "protocol": {

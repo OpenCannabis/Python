@@ -5,16 +5,16 @@ package(
 
 load(
     "//config:rules.bzl",
-    "ocp_py",
+    "ocp_module"
 )
-
-package = "@ocp//opencannabis/person"
 
 
 ## Protocol Definitions
-[
-    ocp_py(name = n, target = "%s:%s" % (package, n)) for n in [
+ocp_module(
+    name = "person",
+    init = ":__init__.py",
+    protos = [
         "Person",
         "PersonName",
-    ]
-]
+    ],
+)

@@ -9,3 +9,4 @@ __doc__ = """
 """
 
 # `opencannabis.accounting`
+from .Taxes_pb2 import Taxes
