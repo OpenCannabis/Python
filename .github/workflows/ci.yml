@@ -50,12 +50,11 @@ jobs:
           "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
             --ignore "*deps_*" --ignore "*_pb2.py" \
-            --llvm > lcov.py.info
-          file lcov.py.info
-          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
-          #sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
-          cd ..
-          bash -x <(curl -s https://codecov.io/bash) -Z -v -f ./lcov.py.info -F python_tests
+            --llvm > "${GITHUB_WORKSPACE}/lcov.py.info"
+          file "${GITHUB_WORKSPACE}/lcov.py.info"
+          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' "${GITHUB_WORKSPACE}/coverage.py.info"
+          sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' "${GITHUB_WORKSPACE}/lcov.py.info"
+          bash -x <(curl -s https://codecov.io/bash) -Z -v -f "${GITHUB_WORKSPACE}/lcov.py.info" -F python_tests
         env:
           CC: clang-9
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
