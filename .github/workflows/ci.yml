@@ -59,7 +59,7 @@ jobs:
         if: always()
         run: |
           set -x
-          cd "${GITHUB_WORKSPACE}/src"
+          cd "${GITHUB_WORKSPACE}/"
           ~/bin/grcov coverage.py.info dist/Python/_coverage/ -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
             --ignore "*deps_*" --ignore "*_pb2.py"  \
