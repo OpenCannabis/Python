@@ -26,7 +26,7 @@ COVERAGE_ARGS ?= -t- \
 	--linkopt=--coverage \
 	--linkopt=-lc \
 	--combined_report=lcov \
-	--test_env="PYTHON_COVERAGE=$(PWD)/coveragepy-lcov-support/__main__.py"
+	--test_env="PYTHON_COVERAGE=$(PWD)/.env/coverage/coveragepy-lcov-support/__main__.py"
 
 ifeq ($(CI),yes)
 COVERAGE_REPORT ?= $(PWD)/bazel-out/_coverage/_coverage_report.dat
@@ -56,6 +56,7 @@ endif
 
 LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 
+CD ?= $(shell which cd)
 CP ?= $(shell which cp)
 LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
@@ -103,9 +104,13 @@ build: $(LIBDIST) $(BAZELISK)  ## Build the Python SDK for OpenCannabis.
 
 prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 	@echo "Starting interactive terminal session..."
-	$(RULE)cd $(LIBDIST) && $(PYTHON)
+	$(RULE)$(CD) $(LIBDIST) && $(PYTHON)
 
-test: $(ENV)/python $(BAZELISK)  ## Run unit tests for the SDK.
+ifeq ($(COVERAGE),yes)
+test: $(ENV)/python $(BAZELISK) $(ENV)/coverage  ## Run unit tests for the SDK.
+else
+test: $(ENV)/python $(BAZELISK)
+endif
 	@echo "Running testsuite..."
 	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TEST_ARGS) $(TESTS)
 
@@ -138,7 +143,7 @@ $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TAG) $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
-	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
+	$(RULE)$(CD) $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
 
 environment env: $(ENV)/python $(BAZELISK)  ## Prepare the local Python environment.
 	@echo "Environment ready."
@@ -156,6 +161,13 @@ $(ENV)/python: $(ENV)
 	@echo "Installing Pip deps..."
 	$(RULE)$(PIP) install -r requirements.txt
 	@echo "Python environment ready."
+
+$(ENV)/coverage: $(ENV)
+	@echo "Installing coverage tools..."
+	$(RULE)$(MKDIR) -p $(ENV)/coverage && \
+		$(CD) $(ENV)/coverage && \
+		$(CURL) -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xz;
+	@echo "Coverage tools ready."
 
 $(BAZELISK):
 	@echo "Installing local Bazel toolchain..."
