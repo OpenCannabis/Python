@@ -11,8 +11,16 @@ DIST ?= $(PWD)/dist
 LIBDIST ?= $(DIST)/lib
 VERBOSE ?= no
 TARGET ?= //:archive
+TESTS ?= //pytests:tests
 IBAZEL_VERSION ?= v0.13.1
 BAZELISK_VERSION ?= v1.6.0
+COVERAGE ?= yes
+
+ifeq ($(COVERAGE),yes)
+TEST_COMMAND ?= coverage
+else
+TEST_COMMAND ?= test
+endif
 
 ifeq ($(VERBOSE),no)
 RULE ?= @
@@ -73,6 +81,8 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 	$(RULE)cd $(LIBDIST) && $(PYTHON)
 
 test: $(LIBDIST)  ## Run unit tests for the SDK.
+	@echo "Running testsuite..."
+	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TESTS)
 
 release: $(LIBDIST)  ## Release artifacts for the built library.
 

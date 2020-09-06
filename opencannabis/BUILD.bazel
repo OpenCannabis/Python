@@ -7,7 +7,6 @@ package(
 load(
     "@rules_pkg//:pkg.bzl",
     "pkg_tar",
-    "pkg_zip",
 )
 
 load(

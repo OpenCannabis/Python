@@ -1,0 +1,8 @@
+
+
+test_suite(
+    name = "tests",
+    tests = [
+        "//pytests/simple:sanity",
+    ],
+)

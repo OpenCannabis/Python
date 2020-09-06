@@ -34,3 +34,34 @@ jobs:
       - name: Build & Test
         run: |
           make build test CI=yes VERBOSE=yes
+
+      - name: Generate Coverage
+        run: |
+          cd "${GITHUB_WORKSPACE}/"
+          curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xvz
+          "${GITHUB_WORKSPACE}/bin/bazel" coverage -t- --instrument_test_targets --experimental_cc_coverage \
+              --test_output=errors --linkopt=--coverage --linkopt=-lc \
+              --test_env=PYTHON_COVERAGE=${GITHUB_WORKSPACE}/coveragepy-lcov-support/__main__.py \
+              --define=config_file=test //pytests:tests
+          # Unfortunately, coverage does not produce the hit information. Running
+          # the compiled tests explicitly seems to work though.
+          find dist/bin/pytests/ -maxdepth 1 -regex ".*-test$" -exec {} \;
+          cp bazel-out/k8-fastbuild/testlogs/pd3/pytests/smoke-test/coverage.dat coverage.py.info
+        env:
+          CC: clang-9
+
+      - name: Upload to Codecov
+        if: always()
+        run: |
+          set -x
+          cd "${GITHUB_WORKSPACE}/"
+          "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info dist/bin/pytests/_objs/ -t lcov \
+            --ignore "external/*" --ignore "/usr/*" \
+            --ignore "*deps_*" --ignore "*_pb2.py"  \
+            --llvm > lcov.py.info
+          sed -i 's/SF:.*test\.runfiles\/pytests\/python/SF:pytests/g' coverage.py.info
+          cd ..
+          bash -x <(curl -s https://codecov.io/bash) -Z -v -f src/lcov.py.info -F python_tests
+        env:
+          CC: clang-9
+          CODECOV_TOKEN: ${{ secrets.CODE_COV }}
