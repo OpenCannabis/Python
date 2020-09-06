@@ -18,6 +18,7 @@ COVERAGE ?= yes
 CI ?= no
 TAG ?=
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
+COVERAGE_REPORT ?= $(DIST)/out/_coverage/_coverage_report.dat
 
 ifeq ($(COVERAGE),yes)
 TEST_COMMAND ?= coverage
@@ -94,7 +95,7 @@ test: $(ENV)/python $(BAZELISK)  ## Run unit tests for the SDK.
 
 coverage:  ## Generate a unified coverage report. Typically run in CI and requires grcov.
 	@echo "Generating coverage report..."
-	$(RULE)$(CP) -f $(POSIX_FLAGS) "$(DIST)/Python/bazel-out/_coverage/_coverage_report.dat" coverage.py.info
+	$(RULE)$(CP) -f $(POSIX_FLAGS) $(COVERAGE_REPORT) coverage.py.info
 	$(RULE)$(GRCOV) coverage.py.info -t lcov \
 		--ignore "external/*" --ignore "/usr/*" \
 		--ignore "*deps_*" --ignore "*_pb2.py" \
