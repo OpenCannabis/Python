@@ -33,11 +33,11 @@ jobs:
           mv grcov "${GITHUB_WORKSPACE}/bin/grcov"
           chmod +x "${GITHUB_WORKSPACE}/bin/grcov"
 
-      - name: Build & Test
+      - name: Build
         run: |
-          make build test CI=yes VERBOSE=yes
+          make build CI=yes VERBOSE=yes
 
-      - name: Generate Coverage
+      - name: Test
         run: |
           cd "${GITHUB_WORKSPACE}/"
           curl -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xvz
@@ -54,10 +54,11 @@ jobs:
         run: |
           set -x
           cd "${GITHUB_WORKSPACE}/"
-          "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info dist/Python/_coverage/ -t lcov \
+          "${GITHUB_WORKSPACE}/bin/grcov" coverage.py.info -t lcov \
             --ignore "external/*" --ignore "/usr/*" \
             --ignore "*deps_*" --ignore "*_pb2.py" \
             --llvm > lcov.py.info
+          file lcov.py.info
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
           sed -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' lcov.py.info
           cd ..
