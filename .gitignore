@@ -2,3 +2,4 @@ bazel-out
 dist/
 .ijwb/
 __pycache__/
+.env/

@@ -1,6 +1,7 @@
 directories:
-  ocp
+  opencannabis
   config
+  gust
   tools
   external
   pytests
@@ -13,7 +14,7 @@ build_flags:
 workspace_type: python
 
 targets:
-  //ocp/...
+  //opencannabis/...
   //pytests/...
   //config/...
 

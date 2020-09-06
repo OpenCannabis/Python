@@ -1,0 +1,23 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_module",
+)
+
+
+ocp_module(
+    name = "commerce",
+    init = ":__init__.py",
+    protos = [
+        "Currency",
+        "Customer",
+        "Discounts",
+        "Item",
+        "Order",
+#        "Purchase",  @TODO(sgammon): fix deps
+    ],
+)

@@ -11,14 +11,12 @@ __doc__ = """
 """
 
 import sys
-import species
 
 
 def run_cli(args):
   """ Run the CLI tool. """
 
-  print("Hello, Python!")
-  print(species.species_values())
+  print("Hello, OpenCannabis!")
 
 
 if __name__ == "__main__": run_cli(sys.argv)

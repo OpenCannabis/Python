@@ -3,19 +3,62 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
+load(
+    "//config:rules.bzl",
+    "package",
+)
+
+
+exports_files([
+    "README.md",
+])
+
+package(
+    name = "opencannabis_pkg",
+    version = "0.0.1",
+    description = "Python cannabis for interacting with OpenCannabis data.",
+    long_description = "README.md",
+    classifiers = [
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: POSIX",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
+    keywords = "cannabis datamodel schema sdk",
+    url = "http://github.com/OpenCannabis/Python",
+    author = "Sam Gammon",
+    author_email = "sam.g@cookies.co",
+    license = "MIT",
+    packages = [":tool"],
+    visibility = ["//visibility:private"],
+)
+
+
 
 ## Top-level (Public) Aliases
 alias(
     name = "library",
-    actual = "//ocp:library",
+    actual = "//opencannabis:library",
 )
 
 alias(
     name = "package",
-    actual = "//ocp:package",
+    actual = ":opencannabis_package",
 )
 
 alias(
     name = "tool",
-    actual = "//ocp:tool",
+    actual = "//opencannabis:tool",
+)
+
+alias(
+    name = "archive",
+    actual = "//opencannabis:lib-archive",
 )

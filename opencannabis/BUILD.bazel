@@ -1,0 +1,98 @@
+
+package(
+    default_visibility = ["//visibility:private"],
+)
+
+
+load(
+    "@rules_pkg//:pkg.bzl",
+    "pkg_tar",
+    "pkg_zip",
+)
+
+load(
+    "@rules_python//python:defs.bzl",
+    "py_library",
+    "py_binary",
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_py",
+    "ocp_lib",
+)
+
+
+## File Groups
+filegroup(
+    name = "root-py",
+    srcs = glob(["*.py"]),
+)
+
+
+## Python Libraries
+py_library(
+    name = "main-init",
+    srcs = ["__init__.py"],
+)
+
+
+## Python CLI Tool
+py_binary(
+    name = "ocp-bin",
+    imports = ["ocp"],
+    main = "__main__.py",
+    deps = [":main-init"],
+    srcs = ["__main__.py"],
+)
+
+
+## Compressed Packages
+pkg_tar(
+    name = "ocp-init-archive",
+    srcs = [":main-init"],
+    package_dir = "opencannabis/",
+)
+
+pkg_tar(
+    name = "ocp-lib-archive",
+    deps = [
+        "//gust:gust-init",
+        "//gust/core:core",
+        ":ocp-init-archive",
+    ] + ["//opencannabis/%s:%s" % (path, path) for path in [
+#        "accounting",  @TODO(sgammon)
+        "base",
+        "commerce",
+        "contact",
+        "content",
+        "crypto",
+        "device",
+        "geo",
+#        "inventory",  @TODO(sgammon)
+        "media",
+
+        "structs",
+        "temporal",
+    ]],
+)
+
+
+## Top-level (Public) Aliases
+alias(
+    name = "library",
+    actual = "ocp-bin",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "tool",
+    actual = "ocp-bin",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "lib-archive",
+    actual = "ocp-lib-archive",
+    visibility = ["//visibility:public"],
+)

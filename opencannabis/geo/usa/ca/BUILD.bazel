@@ -1,0 +1,19 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_module",
+)
+
+
+ocp_module(
+    name = "geo",
+    init = ":__init__.py",
+    package = "geo/usa/ca",
+    protos = [
+        "CACounty",
+    ]
+)

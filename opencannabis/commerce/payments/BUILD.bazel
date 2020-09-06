@@ -1,0 +1,19 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_module",
+)
+
+
+ocp_module(
+    name = "payments",
+    init = ":__init__.py",
+    package = "commerce/payments",
+    protos = [
+        "Payment",
+    ]
+)

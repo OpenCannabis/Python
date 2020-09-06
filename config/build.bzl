@@ -14,11 +14,11 @@ load(
 
 DEPS = {
     # OpenCannabis Protocol Sources
-    "opencannabis": {
+    "ocp": {
         "type": "github",
         "repo": "OpenCannabis/Protocol",
-        "target": "1dcb41b4ff641407fb53b9ff22786a5ebe4e6095",
-        "seal": "155596467e61f53ef881dd9f661ec47422989d5fefc39e32c5ccf16e34a6e211"},
+        "target": "0ac19fa280bca2f4d255b70be9db9ba7041f17e6",
+        "seal": "dfa5a789b60e2a822256e9f7309117401710c9e54a09ef377517d9d67a8db80a"},
 
     # OpenCannabis: Python Sources
     "protocol": {

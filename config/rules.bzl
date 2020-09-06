@@ -20,6 +20,11 @@ load(
     _pypi_package = "pypi_package",
 )
 
+load(
+    "@rules_pkg//:pkg.bzl",
+    _pkg_tar = "pkg_tar",
+)
+
 
 def _ocp_model(name, src):
     """ Generate a Python library target for the provided pre-compiled Python model. """
@@ -59,6 +64,29 @@ def _ocp_lib(name):
     return "%s-lib" % name
 
 
+def _ocp_module(name,
+                protos,
+                init,
+                package = None,
+                submodules = [],
+                deps = [],
+                path = None):
+    """ Generate OpenCannabis Python declarations for a given proto module. """
+
+    package_name = "@ocp//opencannabis/%s" % (package or name)
+
+    # declare packages
+    [ocp_py(name = n, target = "%s:%s" % (package_name, n)) for n in protos]
+
+    # declare module tarball
+    _pkg_tar(
+        name = name,
+        package_dir = path or "opencannabis/%s" % (package or name),
+        srcs = [_ocp_lib(":%s" % p) for p in protos] + [init],
+        deps = ["%s/%s/%s:%s" % ("//ocp", (package or name), p, p) for p in submodules] + deps,
+    )
+
+
 def _package(name, **kwargs):
     """ Generate a PyPI package artifact. """
 
@@ -71,4 +99,5 @@ def _package(name, **kwargs):
 ocp_py = _ocp_py
 ocp_lib = _ocp_lib
 package = _package
+ocp_module = _ocp_module
 oc_py_protocol = _oc_py_protocol

@@ -11,8 +11,8 @@ load(
 load(
     "//config:gust.bzl",
     "LOCAL",
-    "GUST_FINGERPRINT",
-    "GUST_VERSION",
+    GUST_FINGERPRINT = "FINGERPRINT",
+    GUST_VERSION = "VERSION",
 )
 
 (local_repository(

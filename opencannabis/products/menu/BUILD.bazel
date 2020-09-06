@@ -1,0 +1,20 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+load(
+    "//config:rules.bzl",
+    "ocp_py",
+)
+
+package = "@ocp//opencannabis/products/menu"
+
+
+## Protocol Definitions
+[
+    ocp_py(name = n, target = "%s:%s" % (package, n)) for n in [
+        "Menu",
+        "Section",
+    ]
+]
