@@ -59,6 +59,7 @@ LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 CP ?= $(shell which cp)
 LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
+SED ?= $(shell which sed)
 AWK ?= $(shell which awk)
 GREP ?= $(shell which grep)
 CURL ?= $(shell which curl)
@@ -116,6 +117,7 @@ endif
 coverage:  ## Generate a unified coverage report. Typically run in CI and requires grcov.
 	@echo "Generating coverage report..."
 	$(RULE)$(CP) -f $(POSIX_FLAGS) $(COVERAGE_REPORT) coverage.py.info
+	$(RULE)$(SED) -i 's/SF:.*test\.runfiles\/ocpy\/pytests/SF:ocpy\/pytests/g' coverage.py.info
 	$(RULE)$(GRCOV) coverage.py.info -t lcov \
 		--ignore "external/*" --ignore "/usr/*" \
 		--ignore "*deps_*" --ignore "*_pb2.py" \
