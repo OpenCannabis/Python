@@ -19,6 +19,15 @@ CI ?= no
 TAG ?=
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
 
+COVERAGE_ARGS ?= -t- \
+	--instrument_test_targets \
+	--experimental_cc_coverage \
+	--test_output=all \
+	--linkopt=--coverage \
+	--linkopt=-lc \
+	--combined_report=lcov \
+	--test_env="PYTHON_COVERAGE=$(PWD)/coveragepy-lcov-support/__main__.py"
+
 ifeq ($(CI),yes)
 COVERAGE_REPORT ?= $(PWD)/bazel-out/_coverage/_coverage_report.dat
 else
@@ -27,8 +36,10 @@ endif
 
 ifeq ($(COVERAGE),yes)
 TEST_COMMAND ?= coverage
+TEST_ARGS ?= $(COVERAGE_ARGS)
 else
 TEST_COMMAND ?= test
+TEST_ARGS ?= --test_output=all
 endif
 
 ifeq ($(CI),yes)
@@ -96,7 +107,7 @@ prompt: $(LIBDIST)  ## Run an interactive prompt with the build SDK.
 
 test: $(ENV)/python $(BAZELISK)  ## Run unit tests for the SDK.
 	@echo "Running testsuite..."
-	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TESTS)
+	$(RULE)$(BAZELISK) $(TEST_COMMAND) $(TAG) $(TEST_ARGS) $(TESTS)
 
 coverage:  ## Generate a unified coverage report. Typically run in CI and requires grcov.
 	@echo "Generating coverage report..."
