@@ -6,6 +6,32 @@
 
 This codebase provides the canonical Python module for leveraging [OpenCannabis](https://github.com/OpenCannabis)-formatted data. Using objects in this module, one can seamlessly decode or encode OCS-compliant data in text, binary, and JSON formats.
 
+### Using the objects
+
+Objects from the [OpenCannabis Specification](https://github.com/OpenCannabis/RFC) and
+[Protocol Definitions](https://github.com/OpenCannabis/Protocol) can be imported in Python and used to express data in
+OCS format. Protocol buffer objects are capable of producing (1) proto text format, (2) binary proto format, or (3)
+JSON.
+
+For example, here's some code that prepares a product key:
+```python
+from opencannabis.base.ProductKey_pb2 import ProductKey
+from opencannabis.base.ProductKind_pb2 import ProductKind
+
+key = ProductKey()
+key.id = "abc123"
+key.type = ProductKind.EDIBLES
+
+str(key)
+
+# returns a text-encoded proto:
+"""
+key: "abc123"
+kind: EDIBLES
+
+"""
+```
+
 ### Installation
 
 To install this package, simply:
