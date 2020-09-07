@@ -1,7 +1,7 @@
 
 ## OpenCannabis for Python
 
-**Latest Release**: `0.0.1-alpha7`
+**Latest Release**: `0.0.1-alpha8`
 
 This codebase provides the canonical Python module for leveraging [OpenCannabis](https://github.com/OpenCannabis)-formatted data. Using objects in this module, one can seamlessly decode or encode OCS-compliant data in text, binary, and JSON formats.
 
@@ -16,7 +16,7 @@ pip install opencannabis
 
 Invoking `make help` reveals local commands intended for development:
 ```text
-ocpy / 0.0.1-alpha7:
+ocpy / 0.0.1-alpha8:
 
 all                            Build and test the SDK.
 build                          Build the Python SDK for OpenCannabis.
