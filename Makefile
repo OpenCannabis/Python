@@ -149,7 +149,7 @@ release: $(LIBDIST) render-tpl  ## Build release artifacts for the library, and 
 
 publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite permissions).
 	@echo "Publishing package 'gust'..."
-	$(RULE)-cd $(GUSTLIB) && $(TWINE) $(TWINE_ACTION) \
+	$(RULE)-cd $(GUSTLIB) && $(TWINE) $(TWINE_ACTION) $(TWINE_ARGS) \
 		dist/gust-*.tar.gz;
 	@echo "Publishing package 'opencannabis'..."
 	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) $(TWINE_ARGS) \
