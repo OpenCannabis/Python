@@ -68,6 +68,7 @@ LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
 GUST_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/gust-lib-archive.tar
 
 CP ?= $(shell which cp)
+MV ?= $(shell which mv)
 LN ?= $(shell which ln)
 TAR ?= $(shell which tar)
 CAT ?= $(shell which cat)
@@ -150,7 +151,6 @@ publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite
 	@echo "Publishing package 'gust'..."
 	$(RULE)-cd $(GUSTLIB) && $(TWINE) $(TWINE_ACTION) \
 		dist/gust-*.tar.gz;
-		dist/gust-*.egg;
 	@echo "Publishing package 'opencannabis'..."
 	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) $(TWINE_ARGS) \
 		dist/opencannabis-*.tar.gz \
@@ -159,7 +159,7 @@ publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
 	@echo "Cleaning codebase..."
-	$(RULE)$(RM) -fr $(POSIX_FLAGS) $(LIBDIST)
+	$(RULE)$(RM) -fr $(POSIX_FLAGS) $(LIBDIST) $(GUSTLIB)
 
 render-tpl:  ## Render templates for help materials, such as the main README.
 	@echo "Re-rendering codebase templates..."
