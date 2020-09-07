@@ -10,7 +10,6 @@ setup(
   author_email='sam.g@cookies.co',
   url='https://github.com/OpenCannabis/Python',
   packages=find_packages(
-    "opencannabis",
     exclude=[
         "*.tests",
         "*.tests.*",
@@ -23,7 +22,8 @@ setup(
         "gust",
         "gust*",
         "gust.*"
-  ]),
+    ]
+  ),
   classifiers=[
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
