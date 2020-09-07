@@ -6,6 +6,20 @@
 
 This codebase provides the canonical Python module for leveraging [OpenCannabis](https://github.com/OpenCannabis)-formatted data. Using objects in this module, one can seamlessly decode or encode OCS-compliant data in text, binary, and JSON formats.
 
+### Installation
+
+To install this package, simply:
+```text
+pip install opencannabis
+```
+
+Or, in a `requirements.txt` file:
+```bash
+echo "opencannabis=={{VERSION}}" >> requirements.txt && pip3 install -r requirements.txt
+```
+
+Tested with Python 3, and theoretically supports Python 2 (let us know, we can fix it if you encounter issues!).
+
 ### Using the objects
 
 Objects from the [OpenCannabis Specification](https://github.com/OpenCannabis/RFC) and
@@ -32,14 +46,9 @@ kind: EDIBLES
 """
 ```
 
-### Installation
-
-To install this package, simply:
-```text
-pip install opencannabis
-```
-
 ### Tooling
 
-Invoking `make help` reveals local commands intended for development:
+Development happens through the `Makefile`, which calls [Bazel](https://bazel.build). The library is assembled by
+sandboxed workers, then built with `setuptools` into various distributions. Invoking `make help` reveals local commands
+intended for development:
 ```text
