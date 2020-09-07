@@ -110,11 +110,20 @@ pkg_tar(
 )
 
 pkg_tar(
+    name = "gust-lib-archive",
+    srcs = [":requirements"],
+    deps = [
+        "//gust:gust-init-archive",
+        "//gust/core:core-archive",
+        "//gust:setup-archive",
+    ],
+)
+
+pkg_tar(
     name = "ocp-lib-archive",
     srcs = [":requirements"],
     deps = [("%s-archive" % i) for i in DEPS_LIST] + [
         ":ocp-setup-archive",
-        "//gust:setup-archive",
     ],
 )
 
@@ -135,5 +144,11 @@ alias(
 alias(
     name = "archive",
     actual = "ocp-lib-archive",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "shim",
+    actual = "gust-lib-archive",
     visibility = ["//visibility:public"],
 )

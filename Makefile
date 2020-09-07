@@ -4,13 +4,14 @@
 #
 
 PROJECT ?= ocpy
-VERSION ?= 0.0.1-beta1
+VERSION ?= 0.0.1-alpha9
 PWD ?= $(shell pwd)
 ENV ?= $(PWD)/.env
 DIST ?= $(PWD)/dist
 LIBDIST ?= $(DIST)/lib
+GUSTLIB ?= $(DIST)/shim
 VERBOSE ?= no
-TARGET ?= //:archive
+TARGET ?= //:archive //:shim
 TESTS ?= //pytests:tests
 IBAZEL_VERSION ?= v0.13.1
 BAZELISK_VERSION ?= v1.6.0
@@ -64,6 +65,7 @@ POSIX_FLAGS ?= -v
 endif
 
 LIB_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/ocp-lib-archive.tar
+GUST_ARCHIVE ?= $(PWD)/dist/bin/opencannabis/gust-lib-archive.tar
 
 CP ?= $(shell which cp)
 LN ?= $(shell which ln)
@@ -141,20 +143,19 @@ report-coverage:  ## Report coverage results to Codecov.
 
 release: $(LIBDIST) render-tpl  ## Build release artifacts for the library, and re-render codebase docs.
 	@echo "Assembling package 'gust'..."
-	$(RULE)cd $(LIBDIST) && $(PYTHON) setup-gust.py $(DISTRIBUTIONS)
+	$(RULE)cd $(GUSTLIB) && $(PYTHON) setup.py $(DISTRIBUTIONS)
 	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
 
 publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite permissions).
-	@#echo "Publishing package 'gust'..."
-	$(RULE)#cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) \
-		#dist/gust-*.tar.gz;
-		#dist/gust-*.egg \
-		#dist/gust-*.wheel;
+	@echo "Publishing package 'gust'..."
+	$(RULE)-cd $(GUSTLIB) && $(TWINE) $(TWINE_ACTION) \
+		dist/gust-*.tar.gz;
+		dist/gust-*.egg;
 	@echo "Publishing package 'opencannabis'..."
 	$(RULE)cd $(LIBDIST) && $(TWINE) $(TWINE_ACTION) $(TWINE_ARGS) \
 		dist/opencannabis-*.tar.gz \
 		dist/opencannabis-*.egg;
-	@echo "Package published: 'opencannabis==$(VERSION)'. See it at https://pypi.org/project/opencannabis/"
+	@echo "Package published: 'opencannabis==$(VERSION)'."
 
 clean:  ## Remove built artifacts (safe to run with codebase changes).
 	@echo "Cleaning codebase..."
@@ -182,8 +183,9 @@ endif
 $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TAG) $(TARGET)
-	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST)
-	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
+	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST) $(GUSTLIB)
+	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE) && $(RM) -fr $(POSIX_FLAGS) gust
+	$(RULE)cd $(GUSTLIB) && $(TAR) $(POSIX_FLAGS) -xf $(GUST_ARCHIVE) && $(MV) setup-gust.py setup.py
 
 environment env: $(ENV)/python $(BAZELISK)  ## Prepare the local Python environment.
 	@echo "Environment ready."
@@ -206,7 +208,7 @@ $(ENV)/coverage: $(ENV)
 	@echo "Installing coverage tools..."
 	$(RULE)$(MKDIR) -p $(ENV)/coverage && \
 		cd $(ENV)/coverage && \
-		$(CURL) -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | tar xz;
+		$(CURL) -L https://github.com/ulfjack/coveragepy/archive/lcov-support.tar.gz | $(TAR) xz;
 	@echo "Coverage tools ready."
 
 $(BAZELISK):
