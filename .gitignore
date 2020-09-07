@@ -7,3 +7,4 @@ coveragepy-lcov-support
 lcov.py.info
 coverage.py.info
 codecov.sh
+sample/

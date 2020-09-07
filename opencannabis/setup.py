@@ -4,12 +4,13 @@ from setuptools import setup, find_packages
 
 setup(
   name='opencannabis',
-  version='0.0.1-alpha8',
+  version='0.0.1-alpha9',
   description='OpenCannabis SDK for Python',
   author='Sam Gammon',
   author_email='sam.g@cookies.co',
   url='https://github.com/OpenCannabis/Python',
-  packages=find_packages(),
+  packages=[f for f in find_packages() if "opencannabis" in f],
+  package_dir={'': 'opencannabis'},
   classifiers=[
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
