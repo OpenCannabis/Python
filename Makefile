@@ -5,6 +5,7 @@
 
 PROJECT ?= ocpy
 VERSION ?= 1.0.0
+
 PWD ?= $(shell pwd)
 ENV ?= $(PWD)/.env
 DIST ?= $(PWD)/dist
