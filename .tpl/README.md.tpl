@@ -29,6 +29,7 @@ JSON.
 
 For example, here's some code that prepares a product key:
 ```python
+from google.protobuf import json_format
 from opencannabis.base.ProductKey_pb2 import ProductKey
 from opencannabis.base.ProductKind_pb2 import ProductKind
 
@@ -36,14 +37,10 @@ key = ProductKey()
 key.id = "abc123"
 key.type = ProductKind.EDIBLES
 
-str(key)
+# encode into spec-compliant JSON
+json_format.MessageToJson(x)
 
-# returns a text-encoded proto:
-"""
-key: "abc123"
-kind: EDIBLES
-
-"""
+'{\n  "id": "abc123",\n  "type": "EDIBLES"\n}'
 ```
 
 ### Tooling
