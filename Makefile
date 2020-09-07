@@ -144,8 +144,8 @@ report-coverage:  ## Report coverage results to Codecov.
 
 release: $(LIBDIST) render-tpl  ## Build release artifacts for the library, and re-render codebase docs.
 	@echo "Assembling package 'gust'..."
-	$(RULE)cd $(GUSTLIB) && $(RM) -fr $(POSIX_FLAGS) gust && $(PYTHON) setup.py $(DISTRIBUTIONS)
-	$(RULE)cd $(LIBDIST) && $(MV) setup-gust.py setup.py && $(PYTHON) setup.py $(DISTRIBUTIONS)
+	$(RULE)cd $(GUSTLIB) && $(MV) setup-gust.py setup.py && $(PYTHON) setup.py $(DISTRIBUTIONS)
+	$(RULE)cd $(LIBDIST) && $(RM) -fr $(POSIX_FLAGS) gust && $(PYTHON) setup.py $(DISTRIBUTIONS)
 
 publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite permissions).
 	@echo "Publishing package 'gust'..."
