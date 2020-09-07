@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='gust',
-    version='1.0.1',
+    version='1.0.2',
     description='Gust shim for Python.',
     author='Sam Gammon',
     author_email='sam.g@cookies.co',

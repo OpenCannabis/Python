@@ -45,6 +45,6 @@ setup(
   install_requires=[
     'protobuf>=3.13.0',
     'colorlog>=4.2.1',
-    'gust>=1.0.1'
+    'gust>=1.0.2'
   ],
 )
