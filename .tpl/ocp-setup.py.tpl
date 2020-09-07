@@ -9,8 +9,21 @@ setup(
   author='Sam Gammon',
   author_email='sam.g@cookies.co',
   url='https://github.com/OpenCannabis/Python',
-  packages=[f for f in find_packages() if "opencannabis" in f],
-  package_dir={'': 'opencannabis'},
+  packages=find_packages(
+    "opencannabis",
+    exclude=[
+        "*.tests",
+        "*.tests.*",
+        "tests.*",
+        "tests",
+        "*.pytests",
+        "*.pytests.*",
+        "pytests.*",
+        "pytests",
+        "gust",
+        "gust*",
+        "gust.*"
+  ]),
   classifiers=[
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
