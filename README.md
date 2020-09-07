@@ -43,6 +43,9 @@ json_format.MessageToJson(x)
 '{\n  "id": "abc123",\n  "type": "EDIBLES"\n}'
 ```
 
+See the [Protobuf docs for Python](https://developers.google.com/protocol-buffers/docs/pythontutorial) for more info and
+code samples.
+
 ### Tooling
 
 Development happens through the `Makefile`, which calls [Bazel](https://bazel.build). The library is assembled by
