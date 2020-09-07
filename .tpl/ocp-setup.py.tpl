@@ -9,7 +9,7 @@ setup(
   author='Sam Gammon',
   author_email='sam.g@cookies.co',
   url='https://github.com/OpenCannabis/Python',
-  packages=['opencannabis'],
+  packages=find_packages(),
   classifiers=[
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
