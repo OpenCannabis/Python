@@ -4,7 +4,8 @@
 #
 
 PROJECT ?= ocpy
-VERSION ?= 0.0.1-beta2
+VERSION ?= 1.0.0
+
 PWD ?= $(shell pwd)
 ENV ?= $(PWD)/.env
 DIST ?= $(PWD)/dist
@@ -144,8 +145,8 @@ report-coverage:  ## Report coverage results to Codecov.
 
 release: $(LIBDIST) render-tpl  ## Build release artifacts for the library, and re-render codebase docs.
 	@echo "Assembling package 'gust'..."
-	$(RULE)cd $(GUSTLIB) && $(PYTHON) setup.py $(DISTRIBUTIONS)
-	$(RULE)cd $(LIBDIST) && $(PYTHON) setup.py $(DISTRIBUTIONS)
+	$(RULE)cd $(GUSTLIB) && $(MV) setup-gust.py setup.py && $(PYTHON) setup.py $(DISTRIBUTIONS)
+	$(RULE)cd $(LIBDIST) && $(RM) -fr $(POSIX_FLAGS) gust && $(PYTHON) setup.py $(DISTRIBUTIONS)
 
 publish: $(LIBDIST) render-tpl  ## Publish release artifacts (assuming requisite permissions).
 	@echo "Publishing package 'gust'..."
@@ -184,8 +185,8 @@ $(LIBDIST): $(ENV)/python $(BAZELISK)
 	@echo "Building SDK..."
 	$(RULE)$(BAZELISK) build $(TAG) $(TARGET)
 	$(RULE)$(MKDIR) -p $(DIST) $(LIBDIST) $(GUSTLIB)
-	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE) && $(RM) -fr $(POSIX_FLAGS) gust
-	$(RULE)cd $(GUSTLIB) && $(TAR) $(POSIX_FLAGS) -xf $(GUST_ARCHIVE) && $(MV) setup-gust.py setup.py
+	$(RULE)cd $(LIBDIST) && $(TAR) $(POSIX_FLAGS) -xf $(LIB_ARCHIVE)
+	$(RULE)cd $(GUSTLIB) && $(TAR) $(POSIX_FLAGS) -xf $(GUST_ARCHIVE)
 
 environment env: $(ENV)/python $(BAZELISK)  ## Prepare the local Python environment.
 	@echo "Environment ready."
