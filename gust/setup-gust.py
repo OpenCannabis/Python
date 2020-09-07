@@ -4,12 +4,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='gust',
-    version='1.0.0',
+    version='1.0.1',
     description='Gust shim for Python.',
     author='Sam Gammon',
     author_email='sam.g@cookies.co',
     url='https://github.com/sgammon/GUST',
-    packages=['gust'],
+    packages=["gust", "gust.core"],
     requires=['protobuf'],
     install_requires=['protobuf>=3.13.0']
 )
