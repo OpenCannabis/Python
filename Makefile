@@ -17,7 +17,7 @@ BAZELISK_VERSION ?= v1.6.0
 COVERAGE ?= no
 RELEASE ?= no
 CI ?= no
-COLORS ?= no
+COLORS ?= yes
 TAG ?=
 DISTRIBUTIONS ?= sdist bdist_egg
 CODECOV_TOKEN ?= 92dcb8f1-a702-4eff-8239-0e19bcfbccd2
@@ -107,10 +107,6 @@ else
     endif
 endif
 
-ifeq ($(COLORS),yes)
-else
-endif
-
 
 all: build test  ## Build and test the SDK.
 
@@ -168,13 +164,19 @@ render-tpl:  ## Render templates for help materials, such as the main README.
 	@echo "Re-rendering codebase templates..."
 	@$(SED) "s/{{VERSION}}/$(VERSION)/g" .tpl/ocp-setup.py.tpl > opencannabis/setup.py;
 	@$(SED) "s/{{VERSION}}/$(VERSION)/g" .tpl/README.md.tpl > README.md;
-	@$(MAKE) help >> README.md;
+	@$(MAKE) help COLORS=no >> README.md;
 	@$(CAT) .tpl/README_FOOTER.md.tpl >> README.md;
 	@echo "Doc templates rendered."
 
+ifeq ($(COLORS),yes)
 help:  ## Show this help text.
 	@echo "$(PROJECT) / $(VERSION):\n"
 	$(RULE)$(GREP) -E '^[a-z1-9A-Z_-]+:.*?## .*$$' $(PWD)/Makefile | sort | $(AWK) 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+else
+help:
+	@echo "$(PROJECT) / $(VERSION):\n"
+	$(RULE)$(GREP) -E '^[a-z1-9A-Z_-]+:.*?## .*$$' $(PWD)/Makefile | sort | $(AWK) 'BEGIN {FS = ":.*?## "}; {printf "%-30s %s\n", $$1, $$2}'
+endif
 
 
 $(LIBDIST): $(ENV)/python $(BAZELISK)
