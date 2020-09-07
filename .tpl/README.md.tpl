@@ -39,7 +39,6 @@ key.type = ProductKind.EDIBLES
 
 # encode into spec-compliant JSON
 json_format.MessageToJson(x)
-
 '{\n  "id": "abc123",\n  "type": "EDIBLES"\n}'
 ```
 
