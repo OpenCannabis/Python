@@ -16,11 +16,6 @@ load(
 )
 
 load(
-    "@pypi_packaging//:pypi_package.bzl",
-    _pypi_package = "pypi_package",
-)
-
-load(
     "@rules_pkg//:pkg.bzl",
     _pkg_tar = "pkg_tar",
 )
@@ -91,17 +86,8 @@ def _ocp_module(name,
     )
 
 
-def _package(name, **kwargs):
-    """ Generate a PyPI package artifact. """
-
-    _pypi_package(
-        name = name,
-        **kwargs
-    )
-
-
 ocp_py = _ocp_py
 ocp_lib = _ocp_lib
-package = _package
 ocp_module = _ocp_module
 oc_py_protocol = _oc_py_protocol
+
