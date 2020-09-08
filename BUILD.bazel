@@ -3,12 +3,6 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
-load(
-    "//config:rules.bzl",
-    "package",
-)
-
-
 exports_files([
     "README.md",
     "requirements.txt",
